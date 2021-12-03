@@ -15,9 +15,12 @@ public class UIManager : MonoBehaviour
     public float Timer;        //total seconds
     public Text TimerText;
     public Text HintText;
+    public AudioSource OutOfTime;
 
     float saveTempTimer;
     bool isStart = false;
+    bool isOutOfTime = false;
+    bool isSoundPlayed = false;
 
     // Start is called before the first frame update
     void Start()
@@ -28,20 +31,27 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Reset the timer, keyboard R
-        if (Input.GetKeyDown("r"))
+        // Reset the timer, keyboard R or mouse right click
+        if (Input.GetKeyDown("r") || Input.GetMouseButton(1))
         {
             Timer = saveTempTimer;
             RefreshTimerText(TimeToString(Timer));
             isStart = false;
         }
-        
-        if (Input.GetKeyDown("s"))
+
+        // Start timer, keyborad S or mouse left click
+        if (Input.GetKeyDown("s") || Input.GetMouseButton(0))
         {
             isStart = true;
         }
 
-        // Start timer, keyborad S
+        // Play video, keyboard SPACE
+        /*
+        if (Input.GetKeyDown("space"){
+
+        }
+        */
+        
         if (isStart)
         {
             if (Timer >= 0)
@@ -52,11 +62,17 @@ public class UIManager : MonoBehaviour
             else
             {
                 RefreshTimerText(TimeToString(0f));
+                isOutOfTime = true;
+                if (!OutOfTime.isPlaying && isSoundPlayed == false)
+                {
+                    OutOfTime.Play();
+                    isSoundPlayed = true;
+                }
             }
         }
 
 
-        // Quit
+        // Quit timer
         if (Input.GetKeyDown("escape"))
         {
             Application.Quit();
@@ -76,7 +92,7 @@ public class UIManager : MonoBehaviour
         int minute = ((int)setTimer - hour * 3600) / 60;
         int second = (int)setTimer - hour * 3600 - minute * 60;
         int millisecond = (int)((setTimer - (int)setTimer) * 1000);
-        string outputtime = string.Format("{0:D2}:{1:D2}:{2:D2}:{3:D3}", hour, minute, second, millisecond);
+        string outputtime = string.Format("{0:D2}:{1:D2}", minute, second);
         return outputtime;
     }
 

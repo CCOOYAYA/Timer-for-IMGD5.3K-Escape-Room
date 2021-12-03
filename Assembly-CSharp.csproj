@@ -53,9 +53,9 @@
     <UnityVersion>2020.3.21f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Assets\Script\UIManager.cs" />
+    <Compile Include="Assets\Script\ProgressBar.cs" />
     <Compile Include="Assets\Beautiful Progress Bar Free - CYKO\Scripts\SliderScripts.cs" />
-    <Compile Include="Assets\ProgressBar.cs" />
+    <Compile Include="Assets\Script\UIManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
