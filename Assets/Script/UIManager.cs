@@ -11,20 +11,28 @@ public class UIManager : MonoBehaviour
         S = this;
     }
 
+    
+    
 
     public float Timer;        //total seconds
+    public int timeToStop;
     public Text TimerText;
     public Text HintText;
     public AudioSource OutOfTime;
+    public GameObject canvas;
+    public GameObject videoPlayer;
 
     float saveTempTimer;
     bool isStart = false;
     bool isOutOfTime = false;
     bool isSoundPlayed = false;
+    bool isVideoActive = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        canvas.SetActive(false);
+        videoPlayer.SetActive(false);
         saveTempTimer = Timer;
     }
 
@@ -45,12 +53,16 @@ public class UIManager : MonoBehaviour
             isStart = true;
         }
 
-        // Play video, keyboard SPACE
-        /*
-        if (Input.GetKeyDown("space"){
-
+        // Play the video, keyboard SPACE
+        // Auto stops when video ends
+        if (Input.GetKeyDown("space"))
+        {
+            canvas.SetActive(true);
+            videoPlayer.SetActive(true);
+            Destroy(canvas, timeToStop);
+            Destroy(videoPlayer, timeToStop);
         }
-        */
+        
         
         if (isStart)
         {
