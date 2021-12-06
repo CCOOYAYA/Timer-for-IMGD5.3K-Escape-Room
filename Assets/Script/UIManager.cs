@@ -52,13 +52,22 @@ public class UIManager : MonoBehaviour
         {
             isStart = true;
         }
+        
+        // Pause timer, keyboard P
+        if (Input.GetKeyDown("p"))
+        {
+            isStart = !isStart;
+        }
 
         // Play the video, keyboard SPACE
         // Auto stops when video ends
         if (Input.GetKeyDown("space"))
         {
+            isStart = false;
+            StopAllCoroutines();
             canvas.SetActive(true);
             videoPlayer.SetActive(true);
+            StartCoroutine("ContinueTimer");
             Destroy(canvas, timeToStop);
             Destroy(videoPlayer, timeToStop);
         }
@@ -111,5 +120,12 @@ public class UIManager : MonoBehaviour
     public float getSetTimer()
     {
         return Timer;
+    }
+
+    IEnumerator ContinueTimer()
+    {
+        yield return new WaitForSeconds(timeToStop);
+        isStart = true;
+        yield return null;
     }
 }
