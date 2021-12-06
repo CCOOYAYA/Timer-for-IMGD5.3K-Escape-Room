@@ -5,7 +5,7 @@ This is a timer program for IMGD 5300 escape room.
 Build for Windows and Linux Platform Added.
 Download the zipped file.
 
-## Controls:
+## Controls
 S / Mouse Left Click: Start timer
 
 R / Mouse Right Click: Reset timer
