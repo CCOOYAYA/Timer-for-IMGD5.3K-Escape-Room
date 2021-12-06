@@ -11,3 +11,5 @@ S / Mouse Left Click: Start timer
 R / Mouse Right Click: Reset timer
 
 SPACE: Display Video
+
+P: Pause the timer, press P or S when paused again to continue the timer
