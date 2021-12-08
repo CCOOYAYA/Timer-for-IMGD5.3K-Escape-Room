@@ -23,17 +23,20 @@ public class UIManager : MonoBehaviour
     public GameObject videoPlayer;
 
     float saveTempTimer;
+    public float maxTime;
     bool isStart = false;
     bool isOutOfTime = false;
-    bool isSoundPlayed = false;
+    int num = 0;
     bool isVideoActive = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        RefreshTimerText(TimeToString(Timer));
         canvas.SetActive(false);
         videoPlayer.SetActive(false);
         saveTempTimer = Timer;
+        maxTime = Timer;
     }
 
     // Update is called once per frame
@@ -44,13 +47,19 @@ public class UIManager : MonoBehaviour
         {
             Timer = saveTempTimer;
             RefreshTimerText(TimeToString(Timer));
+            canvas.SetActive(false);
+            videoPlayer.SetActive(false);
             isStart = false;
         }
 
         // Start timer, keyborad S or mouse left click
         if (Input.GetKeyDown("s") || Input.GetMouseButton(0))
         {
-            isStart = true;
+            if (!canvas.active && !videoPlayer.active)
+            {
+                isStart = true;
+            }
+            
         }
         
         // Pause timer, keyboard P
@@ -63,15 +72,35 @@ public class UIManager : MonoBehaviour
         // Auto stops when video ends
         if (Input.GetKeyDown("space"))
         {
-            isStart = false;
-            StopAllCoroutines();
-            canvas.SetActive(true);
-            videoPlayer.SetActive(true);
-            StartCoroutine("ContinueTimer");
-            Destroy(canvas, timeToStop);
-            Destroy(videoPlayer, timeToStop);
+            if (!canvas.active && !videoPlayer.active)
+            {
+                isStart = false;
+                StopAllCoroutines();
+                canvas.SetActive(true);
+                videoPlayer.SetActive(true);
+                // Stop playing video when ends
+                StartCoroutine("StopPlayVideo");
+                // Continue the timer after video ends
+                StartCoroutine("ContinueTimer");
+            }   
         }
         
+        // add 1 minute, keyboard =
+        if (Input.GetKeyDown("="))
+        {
+            Timer += 60;
+            maxTime += 60;
+        }
+
+        // decrease 1 minute, keyboard -
+        if (Input.GetKeyDown("-"))
+        {
+            if (Timer >= 60)
+            {
+                Timer -= 60;
+                maxTime -= 60;
+            }
+        }
         
         if (isStart)
         {
@@ -84,10 +113,10 @@ public class UIManager : MonoBehaviour
             {
                 RefreshTimerText(TimeToString(0f));
                 isOutOfTime = true;
-                if (!OutOfTime.isPlaying && isSoundPlayed == false)
+                if (!OutOfTime.isPlaying && num < 3)
                 {
                     OutOfTime.Play();
-                    isSoundPlayed = true;
+                    num++;
                 }
             }
         }
@@ -122,10 +151,23 @@ public class UIManager : MonoBehaviour
         return Timer;
     }
 
+    public float updateMaxTime()
+    {
+        return maxTime;
+    }
+
     IEnumerator ContinueTimer()
     {
         yield return new WaitForSeconds(timeToStop);
         isStart = true;
+        yield return null;
+    }
+
+    IEnumerator StopPlayVideo()
+    {
+        yield return new WaitForSeconds(timeToStop);
+        canvas.SetActive(false);
+        videoPlayer.SetActive(false);
         yield return null;
     }
 }

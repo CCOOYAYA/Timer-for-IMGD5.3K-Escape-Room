@@ -16,12 +16,13 @@ public class ProgressBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        max = UIManager.S.getSetTimer();
+        max = UIManager.S.updateMaxTime();
     }
 
     // Update is called once per frame
     void Update()
     {
+        max = UIManager.S.updateMaxTime();
         current = UIManager.S.getSetTimer();
         GetCurrentFill();
     }
